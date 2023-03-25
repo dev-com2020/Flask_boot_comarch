@@ -6,3 +6,4 @@ sys.path.append(os.getcwd())
 
 with app.app_context():
     db.create_all()
+
