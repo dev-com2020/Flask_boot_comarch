@@ -1,23 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-   <title>Blog</title>
-</head>
-<body>
-<h1>Witamy na blogu!</h1>
+{% extends "base.html" %}
+
+{% block content_title %}Strona główna{% endblock %}
+
+{% block content %}
 {% if number %}
-   <p>Twoja liczba to {{ number|int }} !</p>
-   <ul>
+<p>Twoja liczba to {{ number|int }} !</p>
+<ul>
     {% for i in range(number|int) %}
-      {% if i % 2 == 0 %}
-        <li>{{ i }}</li>
-        {% endif %}
+    {% if i % 2 == 0 %}
+    <li>{{ i }}</li>
+    {% endif %}
     {% endfor %}
-   </ul>
+</ul>
 {% else %}
 <p>Brak cyfry</p>
 {% endif %}
 
 <p>Twoje imię to {{ name|default('nieznany',True) }} !</p>
-</body>
-</html>
+{% endblock %}
