@@ -9,10 +9,10 @@
     <li><a href="{{ url_for('entries.tag_detail', slug=tag.slug) }}">{{ tag.name }}</a></li>
     {% endfor %}
 </ul>
-<p>Opublikowano: {{ entry.created_timestamp.strftime('%d/%m/%Y') }}</p>
+
 {% endblock %}
 
 {% block content %}
-{{ entry.body|safe }}
+{{ entry.content }}
 {% endblock %}
 
