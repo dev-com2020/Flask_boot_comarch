@@ -14,5 +14,10 @@
 
 {% block content %}
 {{ entry.content }}
+{% if g.user == entry.author %}
+<li>Akcje:</li>
+<li><a href="{{ url_for('entries.edit',slug=entry.slug) }}">Edytuj</a></li>
+<li><a href="{{ url_for('entries.delete',slug=entry.slug) }}">Usuń</a></li>
+{% endif %}
 {% endblock %}
 

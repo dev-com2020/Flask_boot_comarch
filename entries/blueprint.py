@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g
 from flask_login import login_required
 from werkzeug.utils import secure_filename
 from app import app, db
@@ -35,7 +35,7 @@ def create():
     if request.method == 'POST':
         form = EntryForm(request.form)
         if form.validate():
-            entry = form.save_entry(Entry())
+            entry = form.save_entry(Entry(author=g.user))
             db.session.add(entry)
             db.session.commit()
             flash('Entry "%s" created successfully.' % entry.title, 'success')
@@ -100,6 +100,7 @@ def image_upload():
 
 
 def entry_list(template, query, **context):
+    query = filter_status_by_user(query)
     valid_statuses = (Entry.STATUS_PUBLIC, Entry.STATUS_DRAFT)
     query = query.filter(Entry.status.in_(valid_statuses))
     if request.args.get('q'):
@@ -111,9 +112,20 @@ def entry_list(template, query, **context):
     return object_list(template, query, **context)
 
 
-def get_entry_or_404(slug):
-    valid_statuses = (Entry.STATUS_PUBLIC, Entry.STATUS_DRAFT)
-    return Entry.query.filter(
-        (Entry.slug == slug) &
-        (Entry.status.in_(valid_statuses))
-    ).first_or_404()
+def get_entry_or_404(slug, author=None):
+    query = Entry.query.filter(Entry.slug == slug)
+    if author:
+        query = query.filter(Entry.author == author)
+    else:
+        query = filter_status_by_user(query)
+    return query.first_or_404()
+
+
+def filter_status_by_user(query):
+    if not g.user.is_authenticated:
+        return query.filter(Entry.status == Entry.STATUS_PUBLIC)
+    else:
+        query = query.filter(
+            (Entry.status == Entry.STATUS_DELETED) |
+            ((Entry.author == g.user) & (Entry.status != Entry.STATUS_DELETED)))
+        return query
