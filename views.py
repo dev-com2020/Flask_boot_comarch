@@ -8,4 +8,4 @@ def homepage():
     number = request.args.get('number')
     # if not name:
     #     name = 'nieznany'
-    return render_template('index.html', name=name, number=number)
+    return render_template('index2.html', name=name, number=number)

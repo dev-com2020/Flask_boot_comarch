@@ -39,7 +39,7 @@
     </tr>
     {% for item in data["list"] %}
     <tr>
-        <td>{{ item["dt_text"] }}</td>
+        <td>{{ item["dt_txt"] }}</td>
         <td>{{ item["main"]["temp"] }}°C</td>
         <td>{{ item["main"]["humidity"] }}%</td>
         <td>
@@ -49,5 +49,6 @@
         </td>
         <td>{{ '%.2f' % (item["wind"]["speed"]*3.6) }} km/h ({{ item["wind"]["deg"] }} deg)</td>
     </tr>
+    {% endfor %}
 </table>
 </body>

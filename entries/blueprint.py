@@ -9,7 +9,7 @@ entries = Blueprint('entries', __name__, template_folder='templates')
 @entries.route('/')
 def index():
     entries = Entry.query.order_by(Entry.created_timestamp.desc())
-    return entry_list('entries/index.html', entries)
+    return entry_list('entries/index2.html', entries)
 
 
 @entries.route('/tags/')
