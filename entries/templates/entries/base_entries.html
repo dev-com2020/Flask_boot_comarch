@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block sidebar %}
-<form class="well form-search" method="get" role="form">
-  <div class="input-group">
-    <input type="text" name="q" class="input-medium search-query" placeholder="Wyszukaj..."
-           value="{{ request.args.get('q','') }}"/>
-    <span class="input-group-btn">
-    <button type="submit" class="btn btn-default">Search</button>
-    </span>
+  <form class="form-inline well" method="get" role="form">
+    <div class="input-group">
+      <input class="form-control input-xs" name="q" placeholder="Search..." value="{{ request.args.get('q', '') }}" />
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Go</button>
+      </span>
     </div>
-</form>
+  </form>
 {% endblock %}
 {% block content %}
 {% include "includes/list.html" %}
+{% include "includes/page_links.html" %}
 {% endblock %}
 
 
