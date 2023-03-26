@@ -1,8 +1,10 @@
+import os
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app import db
+from werkzeug.utils import secure_filename
+from app import app, db
 from helpers import object_list
 from models import Entry, Tag
-from entries.forms import EntryForm
+from entries.forms import EntryForm, ImageForm
 
 entries = Blueprint('entries', __name__, template_folder='templates')
 
@@ -75,6 +77,21 @@ def delete(slug):
 def detail(slug):
     entry = get_entry_or_404(slug)
     return render_template('entries/detail.html', entry=entry)
+
+
+@entries.route('/image-upload/', methods=('GET', 'POST'))
+def image_upload():
+    if request.method == 'POST':
+        form = ImageForm(request.form)
+        if form.validate():
+            image_file = request.files['file']
+            filename = os.path.join(app.config['IMAGE_DIR'], secure_filename(image_file.filename))
+            image_file.save(filename)
+            flash('Image "%s" uploaded successfully.' % image_file.filename, 'success')
+            return redirect(url_for('entries.index'))
+    else:
+        form = ImageForm()
+    return render_template('entries/image_upload.html', form=form)
 
 
 def entry_list(template, query, **context):

@@ -2,6 +2,8 @@ import os
 
 class Configuration:
     APPLICATION_DIR = os.path.dirname(os.path.realpath(__file__))
+    STATIC_DIR = os.path.join(APPLICATION_DIR, 'static')
+    IMAGE_DIR = os.path.join(STATIC_DIR, 'images')
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///%s/blog.db' % APPLICATION_DIR
     SECRET_KEY = 'secret'

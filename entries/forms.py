@@ -25,6 +25,10 @@ class TagField(wtforms.StringField):
         new_tags = [Tag(name=name) for name in new_names]
         return list(existing_tags) + new_tags
 
+class ImageForm(wtforms.Form):
+    file = wtforms.FileField('Image File')
+
+
 
 class EntryForm(wtforms.Form):
     title = wtforms.StringField('Title', validators=[DataRequired()])
