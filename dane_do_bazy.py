@@ -11,8 +11,8 @@
 import sqlite3
 conn = sqlite3.connect('_blog.db')
 c = conn.cursor()
-dane = c.execute('SELECT * FROM entry')
-c.execute('INSERT INTO entry (title,slug,content,status) VALUES ("Kod dla C++","kod-dl-c++","Kod dla C++...", 1)')
+dane = c.execute('SELECT * FROM user')
+c.execute('INSERT INTO user (email,password_hash,name) VALUES ("kwp@tlen.pl","secret","Tomek")')
 conn.commit()
 
 print(dane.fetchall())
