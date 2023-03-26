@@ -1,5 +1,5 @@
 import datetime, re
-from app import db
+from app import db, login_manager, bcrypt
 
 
 def slugify(s):
@@ -52,6 +52,9 @@ class Tag(db.Model):
     def __repr__(self):
         return '<Tag: {}>'.format(self.name)
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,6 +64,38 @@ class User(db.Model):
     slug = db.Column(db.String(64), unique=True)
     active = db.Column(db.Boolean, default=True)
     created_timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
+    def get_id(self):
+        return self.id
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    @staticmethod
+    def make_password(plaintext):
+        return bcrypt.generate_password_hash(plaintext)
+
+    def check_password(self, raw_password):
+        return bcrypt.check_password_hash(self.password_hash, raw_password)
+
+    @classmethod
+    def create(cls, email, password, **kwargs):
+        return User(
+            email=email,
+            password_hash=cls.make_password(password),
+            **kwargs)
+
+    @staticmethod
+    def authenticate(email, password):
+        user = User.query.filter_by(email=email == email).first()
+        if user and user.check_password(password):
+            return user
+        return False
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
