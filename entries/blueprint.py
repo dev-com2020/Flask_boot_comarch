@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from app import db
 from helpers import object_list
 from models import Entry, Tag
@@ -27,7 +27,15 @@ def tag_detail(slug):
 
 @entries.route('/create/' , methods=('GET', 'POST'))
 def create():
-    form = EntryForm()
+    if request.method == 'POST':
+        form = EntryForm(request.form)
+        if form.validate():
+            entry = form.save_entry(Entry())
+            db.session.add(entry)
+            db.session.commit()
+            return redirect(url_for('entries.detail', slug=entry.slug))
+    else:
+        form = EntryForm()
     return render_template('entries/create.html', form=form)
 
 
