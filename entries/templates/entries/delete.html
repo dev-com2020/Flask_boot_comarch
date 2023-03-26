@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "macros/form_field.html" import form_field %}
+
+{% block content_title %}Usuń wpis{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('entries.delete', slug=entry.slug) }}" method="post">
+    <fieldset>
+        <p>Czy na pewno chcesz usunąć wpis <strong>{{ entry.title }}</strong>?</p>
+        <button class="btn btn-danger" type="submit">Usuń</button>
+        <a class="btn" href="{{ url_for('entries.detail', slug=entry.slug) }}">Anuluj</a>
+    </fieldset>
+</form>
+{% endblock %}
